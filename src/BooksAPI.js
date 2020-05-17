@@ -38,7 +38,7 @@ export const search = (query, maxResults) =>
     headers: {
       ...headers,
       'Content-Type': 'application/json'
-    },
+    }, 
     body: JSON.stringify({ query, maxResults })
-  }).then(res => res.json())
+  }).then(res => res.json() )
     .then(data => data.books)
