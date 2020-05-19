@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import Book from './Book';
+import PropTypes from 'prop-types';
+
 class Shelf extends Component{
 
     constructor(props){
@@ -14,18 +16,18 @@ class Shelf extends Component{
 
 render(){
   
-  const {shelfName, booksOnShelf} = this.props;
+
  
 	return(
     
       <div className="bookshelf">
-      <h2 className="bookshelf-title">{shelfName}</h2>
+      <h2 className="bookshelf-title">{this.props.shelfName}</h2>
 <div className="bookshelf-books">
 <ol className="books-grid">
 
-{booksOnShelf.length>0 && booksOnShelf.map((dbook) => (
+{this.props.booksOnShelf.length>0 && this.props.booksOnShelf.map((dbook) => (
   <li key={dbook.id} >
-  <Book book={dbook} onHandleChangeShelf={this.props.onHandleChangeShelf}  key={dbook.id} />
+  <Book book={dbook} shelf={dbook.shelf} onHandleChangeShelf={this.props.onHandleChangeShelf}  key={dbook.id} />
 
 </li>
 ))}
@@ -44,6 +46,11 @@ render(){
 
 }
 
+};
+Shelf.propTypes={
+	booksOnShelf: PropTypes.array.isRequired,
+	shelfName: PropTypes.string.isRequired,
+	onHandleChangeShelf: PropTypes.func.isRequired,
 }
 
 export default Shelf

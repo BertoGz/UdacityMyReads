@@ -15,8 +15,6 @@ class BooksApp extends React.Component {
     read:[],
     want:[],
     reading:[]
-   
-    
   };
 
 
@@ -35,16 +33,13 @@ this.setState({want:wantBooks})
 
 const readBooks = this.state.allBooks.filter(book => book.shelf === 'read');
 this.setState({read:readBooks});
-console.log(this.state.read);
 }
 
 
-
-
-   async onHandleChangeShelf(book,e){
-    const shelfFrom = book.shelf;
-     const shelfTo = e;
-    await update(book,e)
+   async onHandleChangeShelf(book,currentShelf,targetShelf){
+    const shelfFrom = currentShelf;
+     const shelfTo = targetShelf;
+    await update(book,targetShelf)
 	const newBook = await get(book.id)
 
     if (shelfTo==='currentlyReading'){
@@ -53,31 +48,27 @@ console.log(this.state.read);
 	else if (shelfTo==='wantToRead'){
 	this.setState({ want: [...this.state.want, newBook] })
     }
-
 	else if (shelfTo==='read'){
     this.setState({ read: [...this.state.read, newBook] })
     }
 
 	if (shelfFrom === 'currentlyReading')
     {
-		const readingBooks = this.state.reading.filter(b => b !== book);
+		const readingBooks = this.state.reading.filter(b => b.id !== book.id);
 		this.setState({reading:readingBooks});
     }
 	else if (shelfFrom === 'wantToRead')
     {
-		const wantBooks = this.state.want.filter(b => b !== book);
+		const wantBooks = this.state.want.filter(b => b.id !== book.id);
 		this.setState({want:wantBooks});
     }
 	else if (shelfFrom === 'read')
     {
-		const readBooks = this.state.read.filter(b => b !== book);
+		const readBooks = this.state.read.filter(b => b.id !== book.id);
 		this.setState({read:readBooks});
     }
 
 }
-
-
-
 
   render() {
 

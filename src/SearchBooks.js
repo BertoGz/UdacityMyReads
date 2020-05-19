@@ -3,23 +3,37 @@ import * as BooksAPI from './BooksAPI';
 import {get} from './BooksAPI';
 import Book from './Book'
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
 class SearchBooks extends Component{
   
   state={
   searchValue:"",
-  books:[ ]
+  bookList:[],
+  searchedBooks:[]
   }
   
 
-
-
 async searchBooks(query){
-await BooksAPI.search(query.trim()).then( (data)=>{this.setState({books: data})}) // update book list
+	await BooksAPI.search(query.trim()).then(books => {
+        if (books.length > 0)
+        { this.setState({bookList: books }); this.setBooksOnShelf(books)  }
+          else{ this.setState({ bookList: [] }); }
+         }) // update book list
+
 }
 
+ setBooksOnShelf= data=>{
+   const tempBooksOnShelf=[];
+   if (data.length>0){
+data.forEach(item => { get(item.id).then( (d)=>{ tempBooksOnShelf.push(d);  this.setState({searchedBooks:tempBooksOnShelf });   } )}  )
+     
+    
+   }
+}
 
  handleValueChange = event => {
-	this.setState({books: []}) ; // clear book list
+	this.setState({bookList: []}) ; // clear book list
+   this.setState({searchedBooks: []}) ; // clear book list
     const query = event.target.value; 
     this.setState({ searchValue: query }); // update searchValue
    	if (query!=="")
@@ -28,6 +42,7 @@ await BooksAPI.search(query.trim()).then( (data)=>{this.setState({books: data})}
    }
 
   };
+
 
 
 render(){
@@ -48,11 +63,10 @@ onChange={this.handleValueChange} value={this.state.searchValue} />
               </div>
               <div className="search-books-results">
                 <ol className="books-grid">
-					{this.state.books.length>0 && this.state.books.map((dBook) => (
-                      	
+					{this.state.searchedBooks.length>0 && this.state.searchedBooks.map((dBook) => (
                       <li key={dBook.id}>
-
-					<Book book={dBook} onHandleChangeShelf={this.props.onHandleChangeShelf} />
+					
+					<Book key={dBook.id} book={dBook} shelf={dBook.shelf} onHandleChangeShelf={this.props.onHandleChangeShelf}/>
                     </li>
                     ))}
 				</ol>
@@ -63,5 +77,9 @@ onChange={this.handleValueChange} value={this.state.searchValue} />
 
   }
 
-}
+};
+
+SearchBooks.propTypes = {
+  onHandleChangeShelf: PropTypes.func.isRequired
+};
 export default SearchBooks
