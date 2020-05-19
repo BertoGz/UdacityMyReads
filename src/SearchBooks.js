@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as BooksAPI from './BooksAPI';
+import {get} from './BooksAPI';
 import Book from './Book'
 import { Link } from 'react-router-dom';
 class SearchBooks extends Component{
@@ -9,23 +10,30 @@ class SearchBooks extends Component{
   books:[ ]
   }
   
- componentDidMount() {
-
-  }
 
 
 
+async searchBooks(query){
+await BooksAPI.search(query.trim()).then( (data)=>{this.setState({books: data})}) // update book list
+}
 
 
  handleValueChange = event => {
 	this.setState({books: []}) ; // clear book list
     const query = event.target.value; 
     this.setState({ searchValue: query }); // update searchValue
-	BooksAPI.search(query.trim()).then((data)=>{this.setState({books:data})}) // update book list
+   	if (query!=="")
+   {
+	this.searchBooks(query)
+   }
+
   };
 
+
 render(){
-  
+
+
+
   	
       return(
       <div className="search-books">
@@ -40,11 +48,11 @@ onChange={this.handleValueChange} value={this.state.searchValue} />
               </div>
               <div className="search-books-results">
                 <ol className="books-grid">
-					{this.state.books.length>0 && this.state.books.map((book) => (
-                      <li>
-					<Book book={book} />
+					{this.state.books.length>0 && this.state.books.map((dBook) => (
+                      	
+                      <li key={dBook.id}>
 
-					/*<Book title={book.title} bookImage={"url(" + book.imageLinks.thumbnail + ")"} />*/
+					<Book book={dBook} onHandleChangeShelf={this.props.onHandleChangeShelf} />
                     </li>
                     ))}
 				</ol>

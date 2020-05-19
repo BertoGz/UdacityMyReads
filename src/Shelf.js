@@ -16,27 +16,25 @@ render(){
   
   const {shelfName, booksOnShelf} = this.props;
  
-console.log(booksOnShelf);
 	return(
     
-                  <div className="bookshelf">
-                  <h2 className="bookshelf-title">{shelfName}</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
+      <div className="bookshelf">
+      <h2 className="bookshelf-title">{shelfName}</h2>
+<div className="bookshelf-books">
+<ol className="books-grid">
 
-					{booksOnShelf.length>0 && booksOnShelf.map((dbook) => (
-                    <li>
-					<Book book={dbook} />
+{booksOnShelf.length>0 && booksOnShelf.map((dbook) => (
+  <li key={dbook.id} >
+  <Book book={dbook} onHandleChangeShelf={this.props.onHandleChangeShelf}  key={dbook.id} />
 
-			
-                    </li>
-                    ))}
-          
-                 
-                    
-                    </ol>
-                  </div>
-                </div>
+</li>
+))}
+
+
+
+</ol>
+</div>
+</div>
     
     
     

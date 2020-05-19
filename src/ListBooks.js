@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import Book from './Book';
 import Shelf from './Shelf';
-import * as BooksAPI from './BooksAPI';
 import {Link} from 'react-router-dom';
 class ListBooks extends Component{
   
@@ -18,24 +16,23 @@ class ListBooks extends Component{
    
   }
   
-  componentDidMount(){
- this.setState({reading:this.props.booksReading})
-    this.setState({reading:this.props.booksWant})
-     this.setState({read:this.props.booksRead})
-  }
+
 	
   render(){
     
+
+    
     return(
+      
     <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
               <div>
-  				<Shelf shelfName={"Currently Reading"} booksOnShelf={this.props.booksReading}/>
-    			<Shelf shelfName={"Want To Read"} booksOnShelf={this.props.booksWant}/>
-				<Shelf shelfName={"Read"} booksOnShelf={this.props.booksRead}/>
+  				<Shelf shelfName={"Currently Reading"} booksOnShelf={this.props.booksReading} onHandleChangeShelf={this.props.onHandleChangeShelf}  />
+    			<Shelf shelfName={"Want To Read"} booksOnShelf={this.props.booksWant} onHandleChangeShelf={this.props.onHandleChangeShelf} />
+				<Shelf shelfName={"Read"} booksOnShelf={this.props.booksRead} onHandleChangeShelf={this.props.onHandleChangeShelf} />
               </div>
             </div>
             <div className="open-search">
